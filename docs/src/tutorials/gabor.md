@@ -17,6 +17,10 @@ using Images
 # Load hologram
 img = load_gray2float("./test/holo1.png")
 
+# Insert the code for the modification here
+# Convert img from Matrix{Float32} to CuArray{Float32, 2}
+d_img = CuArray(img)  # Explicitly convert to CuArray
+
 # Parameters
 λ = 0.6328 # Wavelength [μm] 
 Δx = 10.0 # Pixel size [μm]
@@ -30,8 +34,11 @@ d_sqr = cu_transfer_sqrt_arr(datlen, λ, Δx)
 d_tf = cu_transfer(-z0, datlen, λ, d_sqr)
 d_slice = cu_transfer(-Δz, datlen, λ, d_sqr)
 
-# Make a wavefront
-d_wavefront = cu_gabor_wavefront(img)
+# # Make a wavefront
+# d_wavefront = cu_gabor_wavefront(img)
+
+Make a wavefront
+d_wavefront = cu_gabor_wavefront(d_img)
 
 # Reconstruction
 d_xyproj = cu_get_reconst_xyprojection(d_wavefront, d_tf, d_slice, slices)
